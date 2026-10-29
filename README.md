@@ -1,9 +1,10 @@
 # Cars Dealership - Full Stack Cloud Development Capstone Project
 
-## Project Name: Cars Dealership Application
-**Cars Dealership** is a national car retailer in the United States. This full-stack responsive web application allows users to view nationwide dealership branches, browse car models, read customer reviews with automated sentiment analysis, and submit new reviews.
+- **Repository Name**: `xrwvm-fullstack_developer_capstone`
+- **Project Name**: `Cars Dealership Application`
 
 ## Overview
+**Cars Dealership** is a national car retailer in the United States. This full-stack responsive web application allows users to view nationwide dealership branches, browse car models, read customer reviews with automated sentiment analysis, and submit new reviews.
 This project was developed as the Capstone Project for the **IBM Full Stack Software Developer Professional Certificate**. It implements a robust microservices architecture combining Django, Node.js/Express, MongoDB, SQLite, and Flask, with containerization and cloud deployment capabilities.
 
 ## Architecture & Technology Stack
