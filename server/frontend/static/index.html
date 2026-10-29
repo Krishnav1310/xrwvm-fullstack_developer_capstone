@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cars Dealership Application</title>
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    /* Dealers CSS */
+    table {
+      margin: 5px;
+      padding: 10px;
+      border: grey solid 1px;
+      width: 100%;
+    }
+    td {
+      padding: 10px;
+      align-self: center;
+      border: solid grey .5px;
+      text-align: center;
+      font-size: large;
+    }
+    th {
+      padding: 5px;
+      align-self: center;
+      text-align: center;
+      font-size: large;
+      margin-bottom: 1cm;
+      vertical-align: middle;
+      color: black;
+    }
+    .review_panel {
+      display: flex;
+      flex-direction: column;
+      border: solid grey;
+      position: relative;
+      height: 7cm;
+      width: 6cm;
+      overflow-y: scroll;
+      padding: .3cm;
+      padding-top: 0%;
+      border-radius: 10px;
+      box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.5);
+      margin-bottom: .5cm;
+      justify-content: space-between;
+    }
+    .postreview {
+      margin: 20px;
+      padding: 10px;
+      font-size: larger;
+      background-color: darkturquoise;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .reviews_panel {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      column-gap: 1cm;
+      overflow-wrap: normal;
+      margin-top: 1cm;
+      align-items: flex-start;
+    }
+    .reviewer {
+      margin: 10px;
+      font-style: italic;
+      color: gray;
+      font-size: small;
+    }
+    .review {
+      margin-top: 1.5cm;
+    }
+    .emotion_icon {
+      align-self: center;
+      width: 40px;
+      height: 40px;
+      background-color: #0C9;
+      color: #FFF;
+      border-radius: 50px;
+      text-align: center;
+      box-shadow: 2px 2px 3px #999;
+      margin-top: 10px;
+    }
+    .review_icon {
+      width: 40px;
+      cursor: pointer;
+    }
+    .review_icon:hover {
+      transform: scale(1.1);
+      border: solid lightgray;
+    }
+    /* Login & Register CSS */
+    .register_container {
+      display: flex;
+      flex-direction: column;
+      margin: auto;
+      margin-top: 2%;
+      background-color: darkturquoise;
+      min-width: 350px;
+      width: 35%;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .inputs {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .input {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .input_field {
+      height: 40px;
+      width: 250px;
+      margin-left: 10px;
+      font-size: medium;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .submit_panel {
+      display: flex;
+      flex-direction: column;
+      margin-top: 5%;
+      margin-bottom: 5%;
+      align-items: center;
+    }
+    .submit {
+      width: 150px;
+      cursor: pointer;
+      font-size: large;
+      color: rgb(97, 64, 128);
+      background-color: white;
+      border: none;
+      border-radius: 10px;
+      height: 50px;
+      font-weight: bold;
+    }
+    .submit:hover {
+      background-color: wheat;
+    }
+    .header {
+      color: white;
+      margin-bottom: 15px;
+    }
+    .img_icon {
+      width: 40px;
+      background-color: #0C9;
+      color: #FFF;
+      border-radius: 50px;
+      padding: 5px;
+      text-align: center;
+      box-shadow: 2px 2px 3px #999;
+    }
+    .login_panel {
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      width: 400px;
+      padding: 25px;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-radius: 10px;
+      margin-top: 5%;
+    }
+    .action_button {
+      cursor: pointer;
+      font-size: large;
+      color: rgb(97, 64, 128);
+      border-radius: 10px;
+      height: 40px;
+      padding-left: .5cm;
+      padding-right: .5cm;
+      margin: .5cm;
+    }
+    .modalContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const Header = () => {
+      const logout = async (e) => {
+        if(e) e.preventDefault();
+        let logout_url = window.location.origin + "/djangoapp/logout";
+        const res = await fetch(logout_url, { method: "GET" });
+        const json = await res.json();
+        if (json) {
+          let username = sessionStorage.getItem('username');
+          sessionStorage.removeItem('username');
+          window.location.href = window.location.origin + "/dealers";
+        }
+      };
+
+      let curr_user = sessionStorage.getItem('username');
+      let home_page_items = (
+        <div style={{display: "flex", alignItems: "center"}}>
+          <a className="nav-link" href="/login" style={{color: "white", marginRight: "15px", fontSize: "larger", textDecoration: "none"}}>Login</a>
+          <a className="nav-link" href="/register" style={{color: "white", fontSize: "larger", textDecoration: "none"}}>Register</a>
+        </div>
+      );
+
+      if (curr_user) {
+        home_page_items = (
+          <div style={{display: "flex", alignItems: "center"}}>
+            <span style={{fontSize: "20px", color: "white", marginRight: "15px", fontWeight: "bold"}}>{curr_user}</span>
+            <a className="nav-link" href="/djangoapp/logout" onClick={logout} style={{color: "white", fontSize: "larger", textDecoration: "none"}}>Logout</a>
+          </div>
+        );
+      }
+
+      return (
+        <nav className="navbar navbar-expand-lg navbar-light" style={{backgroundColor: "darkturquoise", minHeight: "1in", padding: "0 20px"}}>
+          <div className="container-fluid">
+            <h2 style={{paddingRight: "5%", margin: 0}}>Dealerships</h2>
+            <div className="collapse navbar-collapse" id="navbarText">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <a className="nav-link active" style={{fontSize: "larger"}} href="/">Home</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" style={{fontSize: "larger"}} href="/about">About Us</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" style={{fontSize: "larger"}} href="/contact">Contact Us</a>
+                </li>
+              </ul>
+              <span className="navbar-text">
+                {home_page_items}
+              </span>
+            </div>
+          </div>
+        </nav>
+      );
+    };
+
+    const Dealers = () => {
+      const [dealersList, setDealersList] = useState([]);
+      const [states, setStates] = useState([]);
+      const [selectedState, setSelectedState] = useState("");
+
+      const get_dealers = async () => {
+        const res = await fetch("/djangoapp/get_dealers");
+        const retobj = await res.json();
+        if (retobj.status === 200) {
+          let all_dealers = Array.from(retobj.dealers);
+          let stateList = [];
+          all_dealers.forEach(d => stateList.push(d.state));
+          setStates(Array.from(new Set(stateList)).sort());
+          setDealersList(all_dealers);
+        }
+      };
+
+      const filterDealers = async (state) => {
+        setSelectedState(state);
+        let url = state === "All" ? "/djangoapp/get_dealers" : `/djangoapp/get_dealers/${state}`;
+        const res = await fetch(url);
+        const retobj = await res.json();
+        if (retobj.status === 200) {
+          setDealersList(Array.from(retobj.dealers));
+        }
+      };
+
+      useEffect(() => {
+        get_dealers();
+      }, []);
+
+      let isLoggedIn = sessionStorage.getItem("username") != null;
+
+      return (
+        <div>
+          <Header />
+          <div style={{padding: "20px"}}>
+            <table className="table table-hover">
+              <thead>
+                <tr style={{backgroundColor: "#f2f2f2"}}>
+                  <th>ID</th>
+                  <th>Dealer Name</th>
+                  <th>City</th>
+                  <th>Address</th>
+                  <th>Zip</th>
+                  <th>
+                    <select name="state" id="state" value={selectedState} onChange={(e) => filterDealers(e.target.value)} style={{padding: "5px", borderRadius: "5px"}}>
+                      <option value="" disabled hidden>State</option>
+                      <option value="All">All States</option>
+                      {states.map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </th>
+                  {isLoggedIn && <th>Review Dealer</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {dealersList.map(dealer => (
+                  <tr key={dealer.id}>
+                    <td>{dealer.id}</td>
+                    <td><a href={`/dealer/${dealer.id}`} style={{color: "#0056b3", fontWeight: "bold"}}>{dealer.full_name}</a></td>
+                    <td>{dealer.city}</td>
+                    <td>{dealer.address}</td>
+                    <td>{dealer.zip}</td>
+                    <td>{dealer.state}</td>
+                    {isLoggedIn && (
+                      <td>
+                        <a href={`/postreview/${dealer.id}`}>
+                          <img src="/static/reviewicon.png" className="review_icon" alt="Review Dealer" title="Review Dealer" />
+                        </a>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    };
+
+    const Dealer = ({ id }) => {
+      const [dealer, setDealer] = useState({});
+      const [reviews, setReviews] = useState([]);
+      const [unreviewed, setUnreviewed] = useState(false);
+
+      const get_dealer = async () => {
+        const res = await fetch(`/djangoapp/dealer/${id}`);
+        const retobj = await res.json();
+        if (retobj.status === 200 && retobj.dealer && retobj.dealer.length > 0) {
+          setDealer(retobj.dealer[0]);
+        }
+      };
+
+      const get_reviews = async () => {
+        const res = await fetch(`/djangoapp/reviews/dealer/${id}`);
+        const retobj = await res.json();
+        if (retobj.status === 200) {
+          if (retobj.reviews && retobj.reviews.length > 0) {
+            setReviews(retobj.reviews);
+          } else {
+            setUnreviewed(true);
+          }
+        }
+      };
+
+      const senti_icon = (sentiment) => {
+        if (sentiment === "positive") return "/static/positive.png";
+        if (sentiment === "negative") return "/static/negative.png";
+        return "/static/neutral.png";
+      };
+
+      useEffect(() => {
+        get_dealer();
+        get_reviews();
+      }, [id]);
+
+      let isLoggedIn = sessionStorage.getItem("username") != null;
+
+      return (
+        <div>
+          <Header />
+          <div style={{margin: "30px"}}>
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+              <div>
+                <h1 style={{color: "#333"}}>{dealer.full_name}</h1>
+                <h4 style={{color: "grey"}}>{dealer.city}, {dealer.address}, Zip - {dealer.zip}, {dealer.state}</h4>
+              </div>
+              {isLoggedIn && (
+                <a href={`/postreview/${id}`}>
+                  <img src="/static/reviewbutton.png" style={{height: "50px", cursor: "pointer"}} alt="Post Review"/>
+                </a>
+              )}
+            </div>
+            <div className="reviews_panel">
+              {reviews.length === 0 && !unreviewed ? (
+                <p>Loading Reviews....</p>
+              ) : unreviewed ? (
+                <div>No reviews yet!</div>
+              ) : (
+                reviews.map(rev => (
+                  <div key={rev.id} className="review_panel">
+                    <img src={senti_icon(rev.sentiment)} className="emotion_icon" alt={rev.sentiment} title={rev.sentiment}/>
+                    <div className="review">{rev.review}</div>
+                    <div className="reviewer">{rev.name} &bull; {rev.car_make} {rev.car_model} ({rev.car_year})</div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const PostReview = ({ id }) => {
+      const [dealer, setDealer] = useState({});
+      const [review, setReview] = useState("");
+      const [model, setModel] = useState("");
+      const [year, setYear] = useState("");
+      const [date, setDate] = useState("");
+      const [carmodels, setCarmodels] = useState([]);
+
+      useEffect(() => {
+        fetch(`/djangoapp/dealer/${id}`).then(r => r.json()).then(data => {
+          if (data.status === 200 && data.dealer.length > 0) setDealer(data.dealer[0]);
+        });
+        fetch(`/djangoapp/get_cars`).then(r => r.json()).then(data => {
+          if (data.CarModels) setCarmodels(data.CarModels);
+        });
+      }, [id]);
+
+      const submitReview = async () => {
+        let name = sessionStorage.getItem("username") || "Anonymous";
+        if (!model || review === "" || date === "" || year === "") {
+          alert("All details are mandatory");
+          return;
+        }
+        let parts = model.split(" ");
+        let car_make = parts[0];
+        let car_model = parts.slice(1).join(" ");
+
+        const res = await fetch("/djangoapp/add_review", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name,
+            dealership: parseInt(id),
+            review: review,
+            purchase: true,
+            purchase_date: date,
+            car_make: car_make,
+            car_model: car_model,
+            car_year: parseInt(year)
+          })
+        });
+        const json = await res.json();
+        if (json.status === 200) {
+          window.location.href = `/dealer/${id}`;
+        }
+      };
+
+      return (
+        <div>
+          <Header />
+          <div style={{margin: "40px auto", maxWidth: "700px", padding: "20px", border: "1px solid #ddd", borderRadius: "8px", background: "white", boxShadow: "0 2px 6px rgba(0,0,0,0.1)"}}>
+            <h2 style={{color: "darkblue"}}>{dealer.full_name}</h2>
+            <div style={{marginTop: "20px"}}>
+              <label><strong>Write Review:</strong></label>
+              <textarea id="review" className="form-control" rows="5" value={review} onChange={(e) => setReview(e.target.value)} placeholder="Write your experience with this dealer here..."></textarea>
+            </div>
+            <div style={{marginTop: "15px"}}>
+              <label><strong>Purchase Date:</strong></label>
+              <input type="date" className="form-control" value={date} onChange={(e) => setDate(e.target.value)} />
+            </div>
+            <div style={{marginTop: "15px"}}>
+              <label><strong>Car Make &amp; Model:</strong></label>
+              <select className="form-select" value={model} onChange={(e) => setModel(e.target.value)}>
+                <option value="" disabled hidden>Choose Car Make and Model</option>
+                {carmodels.map((c, i) => (
+                  <option key={i} value={`${c.CarMake} ${c.CarModel}`}>{c.CarMake} {c.CarModel}</option>
+                ))}
+              </select>
+            </div>
+            <div style={{marginTop: "15px"}}>
+              <label><strong>Car Year:</strong></label>
+              <input type="number" className="form-control" min="2015" max="2023" value={year} onChange={(e) => setYear(e.target.value)} placeholder="e.g. 2023" />
+            </div>
+            <div style={{marginTop: "25px", textAlign: "center"}}>
+              <button className="postreview" onClick={submitReview}>Post Review</button>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const Login = () => {
+      const [userName, setUserName] = useState("");
+      const [password, setPassword] = useState("");
+
+      const handleLogin = async (e) => {
+        e.preventDefault();
+        const res = await fetch("/djangoapp/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userName: userName, password: password })
+        });
+        const json = await res.json();
+        if (json.status === "Authenticated") {
+          sessionStorage.setItem("username", json.userName);
+          window.location.href = "/dealers";
+        } else {
+          alert("The user could not be authenticated.");
+        }
+      };
+
+      return (
+        <div>
+          <Header />
+          <div className="modalContainer">
+            <form className="login_panel" onSubmit={handleLogin}>
+              <h3 style={{textAlign: "center", marginBottom: "20px", color: "#333"}}>Login</h3>
+              <div style={{width: "100%", marginBottom: "15px"}}>
+                <label>Username</label>
+                <input type="text" className="form-control" placeholder="Username" value={userName} onChange={(e) => setUserName(e.target.value)} required/>
+              </div>
+              <div style={{width: "100%", marginBottom: "20px"}}>
+                <label>Password</label>
+                <input type="password" className="form-control" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+              </div>
+              <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
+                <button type="submit" className="btn btn-primary" style={{backgroundColor: "rgb(97, 64, 128)", border: "none", width: "120px"}}>Login</button>
+                <a href="/dealers" className="btn btn-secondary" style={{width: "120px"}}>Cancel</a>
+              </div>
+              <div style={{marginTop: "20px", textAlign: "center"}}>
+                <a href="/register" style={{color: "#0056b3", textDecoration: "none"}}>Don't have an account? Register Now</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+    };
+
+    const Register = () => {
+      const [userName, setUserName] = useState("");
+      const [password, setPassword] = useState("");
+      const [email, setEmail] = useState("");
+      const [firstName, setFirstName] = useState("");
+      const [lastName, setLastName] = useState("");
+
+      const handleRegister = async (e) => {
+        e.preventDefault();
+        const res = await fetch("/djangoapp/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userName: userName,
+            password: password,
+            firstName: firstName,
+            lastName: lastName,
+            email: email
+          })
+        });
+        const json = await res.json();
+        if (json.status === "Authenticated") {
+          sessionStorage.setItem("username", json.userName);
+          window.location.href = "/dealers";
+        } else if (json.error === "Already Registered") {
+          alert("The user with same username is already registered.");
+        }
+      };
+
+      return (
+        <div>
+          <Header />
+          <div className="register_container">
+            <div className="header" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+              <h2 style={{margin: 0}}>Sign Up</h2>
+              <a href="/dealers"><img src="/static/close.png" style={{width: "25px"}} alt="Close"/></a>
+            </div>
+            <hr/>
+            <form onSubmit={handleRegister}>
+              <div className="inputs">
+                <div className="input">
+                  <img src="/static/person.png" className="img_icon" alt="Username"/>
+                  <input type="text" placeholder="Username" className="input_field" value={userName} onChange={(e) => setUserName(e.target.value)} required/>
+                </div>
+                <div className="input">
+                  <img src="/static/person.png" className="img_icon" alt="First Name"/>
+                  <input type="text" placeholder="First Name" className="input_field" value={firstName} onChange={(e) => setFirstName(e.target.value)} required/>
+                </div>
+                <div className="input">
+                  <img src="/static/person.png" className="img_icon" alt="Last Name"/>
+                  <input type="text" placeholder="Last Name" className="input_field" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
+                </div>
+                <div className="input">
+                  <img src="/static/email.png" className="img_icon" alt="Email"/>
+                  <input type="email" placeholder="Email" className="input_field" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                </div>
+                <div className="input">
+                  <img src="/static/password.png" className="img_icon" alt="Password"/>
+                  <input type="password" placeholder="Password" className="input_field" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+                </div>
+              </div>
+              <div className="submit_panel">
+                <button type="submit" className="submit">Register</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+    };
+
+    const App = () => {
+      const path = window.location.pathname;
+      if (path === "/login") return <Login />;
+      if (path === "/register") return <Register />;
+      if (path.startsWith("/dealer/")) {
+        const id = path.split("/")[2];
+        return <Dealer id={id} />;
+      }
+      if (path.startsWith("/postreview/")) {
+        const id = path.split("/")[2];
+        return <PostReview id={id} />;
+      }
+      return <Dealers />;
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>

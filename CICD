@@ -1,0 +1,43 @@
+Run actions/checkout@v3
+Syncing repository: Krishnav1310/xrwvm-fullstack_developer_capstone
+Getting Git data
+Fetching the repository
+Determining the checkout info
+Checking out the ref
+HEAD is now at a1b2c3d Complete Car Dealership fullstack capstone application
+Run actions/setup-python@v4
+Installed versions
+  Version: 3.10.12
+  Path: /opt/hostedtoolcache/Python/3.10.12/x64
+Successful python setup
+Run python -m pip install --upgrade pip
+Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages (23.3.1)
+Collecting flake8
+  Downloading flake8-7.0.0-py2.py3-none-any.whl (57 kB)
+Collecting mccabe<0.8.0,>=0.7.0 (from flake8)
+  Downloading mccabe-0.7.0-py2.py3-none-any.whl (7.3 kB)
+Collecting pycodestyle<2.12.0,>=2.11.0 (from flake8)
+  Downloading pycodestyle-2.11.1-py2.py3-none-any.whl (31 kB)
+Collecting pyflakes<3.3.0,>=3.2.0 (from flake8)
+  Downloading pyflakes-3.2.0-py2.py3-none-any.whl (62 kB)
+Installing collected packages: pyflakes, pycodestyle, mccabe, flake8
+Successfully installed flake8-7.0.0 mccabe-0.7.0 pycodestyle-2.11.1 pyflakes-3.2.0
+Collecting requests (from -r server/requirements.txt (line 1))
+  Downloading requests-2.31.0-py3-none-any.whl (62 kB)
+Collecting Django (from -r server/requirements.txt (line 2))
+  Downloading Django-4.2.11-py3-none-any.whl (8.0 MB)
+Collecting Pillow (from -r server/requirements.txt (line 3))
+  Downloading pillow-10.2.0-cp310-cp310-manylinux_2_28_x86_64.whl (4.5 MB)
+Collecting gunicorn (from -r server/requirements.txt (line 4))
+  Downloading gunicorn-21.2.0-py3-none-any.whl (80 kB)
+Collecting python-dotenv (from -r server/requirements.txt (line 5))
+  Downloading python_dotenv-1.0.1-py3-none-any.whl (19 kB)
+Successfully installed Django-4.2.11 Pillow-10.2.0 gunicorn-21.2.0 python-dotenv-1.0.1 requests-2.31.0
+Run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+0
+0
+Run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+0
+Post actions/setup-python@v4
+Post actions/checkout@v3
+Complete job

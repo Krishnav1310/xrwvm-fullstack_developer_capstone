@@ -1,7 +1,14 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Cars Dealership</title>
   <!-- Link the style sheet here -->
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
 </head>
+<body>
 <div>
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
     <div class="container-fluid">
@@ -25,44 +32,45 @@
     </div>
   </nav>
   
-    <div class="card" style="width: 80%;margin: auto; margin-top:5%;">
-      <div class="banner" name="about-header">
-      <!-- Insert header information here -->
-      </div>
-      <div style="display: flex;flex-direction: row; margin:auto">
+  <div class="card" style="width: 80%;margin: auto; margin-top:5%;">
+    <div class="banner" name="about-header" style="text-align: center; padding: 20px;">
+      <h1>About Us</h1>
+      <p style="font-size: 1.15rem; color: #555; max-width: 800px; margin: auto;">
+        Welcome to Cars Dealership, home to the best cars across North America. We deal in sale of domestic and imported cars with high quality, competitive pricing, and unmatched customer service.
+      </p>
+    </div>
+    <div style="display: flex;flex-direction: row; margin:auto; justify-content: space-around; width: 100%; padding: 20px;">
       <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
+        <img class="card-img-top" src="/static/person.png" alt="John Miller">
         <div class="card-body">
-          <p class="title">Person1</p>
-          <p>Person1 Title</p>
-          <p class="card-text">Some text that explains the person1 in about 2 short sentences</p>
-          <p>person1@example.com</p>
+          <h5 class="title">John Miller</h5>
+          <p class="text-muted">CEO &amp; Co-Founder</p>
+          <p class="card-text">John has over 20 years of experience in the automotive industry and leads our company vision.</p>
+          <p><a href="mailto:john.miller@carsdealership.com">john.miller@carsdealership.com</a></p>
         </div>
       </div>
 
       <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
+        <img class="card-img-top" src="/static/person.png" alt="Sarah Connor">
         <div class="card-body">
-          <p class="title">Person2</p>
-          <p>Person2 Title</p>
-          <p class="card-text">Some text that explains the person2 in about 2 short sentences</p>
-          <p>person2@example.com</p>
+          <h5 class="title">Sarah Connor</h5>
+          <p class="text-muted">Chief Technology Officer</p>
+          <p class="card-text">Sarah leads our engineering and cloud infrastructure, ensuring a seamless digital dealership experience.</p>
+          <p><a href="mailto:sarah.connor@carsdealership.com">sarah.connor@carsdealership.com</a></p>
         </div>
       </div>
 
       <div class="card" style="width: 30%;">
-        <img class="card-img-top" src="/static/person.png" alt="Card image">
+        <img class="card-img-top" src="/static/person.png" alt="Michael Chen">
         <div class="card-body">
-          <p class="title">Person3</p>
-          <p>Person3 Title</p>
-          <p class="card-text">Some text that explains the person3 in about 2 short sentences</p>
-          <p>person3@example.com</p>
+          <h5 class="title">Michael Chen</h5>
+          <p class="text-muted">Head of Customer Relations</p>
+          <p class="card-text">Michael is dedicated to ensuring every car owner receives exceptional post-purchase support and care.</p>
+          <p><a href="mailto:michael.chen@carsdealership.com">michael.chen@carsdealership.com</a></p>
         </div>
       </div>
     </div>
-    </div>
-    </div>
-    
+  </div>
 </div>
-
+</body>
 </html>
